@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>ELECNOR PERU | Ficha</title>
+<title>Ficha | ERP</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -22,7 +22,6 @@ body.modo-producto{
   box-shadow:0 32px 80px rgba(0,0,0,.6);
   width:100%;max-width:420px;margin:auto;
 }
-/* CABECERA */
 .hdr{
   padding:20px 22px 16px;position:relative;overflow:hidden;
 }
@@ -49,7 +48,6 @@ body.modo-producto{
 .sub{font-size:11px;margin-top:5px;line-height:1.5}
 .eq-sub{color:#bfdbfe}
 .pr-sub{color:#ddd6fe}
-/* FOTO */
 .foto-wrap{
   background:#0f172a;min-height:240px;max-height:340px;
   display:flex;align-items:center;justify-content:center;overflow:hidden;
@@ -61,7 +59,6 @@ body.modo-producto{
 }
 .no-foto .icon{font-size:60px;opacity:.12}
 .no-foto p{color:#4b5563;font-size:12px;font-style:italic}
-/* INFO */
 .info{padding:16px 20px}
 .row{
   display:flex;justify-content:space-between;align-items:center;
@@ -71,7 +68,6 @@ body.modo-producto{
 .lbl{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px}
 .val{font-size:12px;color:#0f172a;font-weight:600;text-align:right;max-width:60%}
 .pill{padding:3px 11px;border-radius:20px;font-size:10px;font-weight:700}
-/* BTN IMPRIMIR */
 .btn-print{
   display:block;margin:0 20px 16px;padding:11px;text-align:center;
   border:none;border-radius:12px;font-size:13px;font-weight:700;
@@ -79,7 +75,6 @@ body.modo-producto{
 }
 .btn-print.eq-btn{background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
 .btn-print.pr-btn{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
-/* PIE */
 .foot{
   padding:10px 20px;display:flex;justify-content:space-between;align-items:center;
 }
@@ -89,7 +84,6 @@ body.modo-producto{
 .foot span{font-size:8px;font-weight:700}
 .foot.eq-foot span{color:#93c5fd}
 .foot.pr-foot span{color:#c4b5fd}
-/* TIPO BADGE */
 .tipo-badge{
   display:inline-block;padding:2px 8px;border-radius:8px;
   font-size:9px;font-weight:700;margin-bottom:6px;
@@ -129,6 +123,9 @@ function fmt(){
 var p = new URLSearchParams(window.location.search);
 var modo = (p.get('modo')||'equipo').toLowerCase();
 
+// === EMPRESA DINÁMICA — lee de la URL, fallback a ELECNOR PERU S.A.C. ===
+var empresa = (p.get('empresa') || 'ELECNOR PERU S.A.C.').toUpperCase();
+
 /* ── MODO EQUIPO ─────────────────────────────────── */
 if(modo === 'equipo' || modo === ''){
   var cod      = p.get('cod')      || '';
@@ -144,7 +141,7 @@ if(modo === 'equipo' || modo === ''){
   if(!cod){
     document.getElementById('content').innerHTML='<div style="padding:40px;text-align:center;color:#94a3b8">⚠️ Código no encontrado</div>';
   } else {
-    document.title = cod + ' | ELECNOR PERU';
+    document.title = cod + ' | ' + empresa;
     document.body.classList.add('modo-equipo');
     var activo = estado.toUpperCase()==='ACTIVO';
     var dotColor = activo ? '#22c55e' : '#ef4444';
@@ -165,7 +162,7 @@ if(modo === 'equipo' || modo === ''){
 
     document.getElementById('content').innerHTML =
       '<div class="hdr eq-hdr">'+
-        '<div class="badge eq-badge"><span>⚡ ELECNOR PERU S.A.C.</span></div>'+
+        '<div class="badge eq-badge"><span>⚡ '+esc(empresa)+'</span></div>'+
         '<div style="display:inline-block;margin-left:8px;" class="tipo-badge eq-tipo">EQUIPO</div><br>'+
         '<div class="cod"><span class="dot" style="background:'+dotColor+'"></span>'+esc(cod)+'</div>'+
         '<div class="sub eq-sub">🏷️ '+esc(placa)+' &nbsp;•&nbsp; '+esc(marca)+' '+esc(modelo)+'</div>'+
@@ -194,11 +191,12 @@ if(modo === 'equipo' || modo === ''){
   var valS    = p.get('valS')    || '';
   var valD    = p.get('valD')    || '';
   var foto    = p.get('foto')    || '';
+  var proyecto = p.get('proyecto') || '';
 
   if(!cod){
     document.getElementById('content').innerHTML='<div style="padding:40px;text-align:center;color:#94a3b8">⚠️ Código no encontrado</div>';
   } else {
-    document.title = cod + ' | ELECNOR PERU';
+    document.title = cod + ' | ' + empresa;
     document.body.classList.add('modo-producto');
     var imgSrc = toImg(foto);
 
@@ -206,13 +204,14 @@ if(modo === 'equipo' || modo === ''){
       ? '<div class="foto-wrap"><img class="foto-img" id="fp" src="'+esc(imgSrc)+'" alt="'+esc(cod)+'" onerror="document.getElementById(\'fp\').style.display=\'none\';document.getElementById(\'np\').style.display=\'flex\'"/><div id="np" class="no-foto" style="display:none"><span class="icon">📦</span><p>Sin foto registrada</p></div></div>'
       : '<div class="foto-wrap"><div class="no-foto"><span class="icon">📦</span><p>Sin foto registrada</p></div></div>';
 
-    var provRow = prov ? '<div class="row"><span class="lbl">Proveedor</span><span class="val">'+esc(prov)+'</span></div>' : '';
-    var valSRow = valS ? '<div class="row"><span class="lbl">Valor S/.</span><span class="val">S/. '+esc(valS)+'</span></div>' : '';
-    var valDRow = valD ? '<div class="row"><span class="lbl">Valor USD</span><span class="val">$ '+esc(valD)+'</span></div>' : '';
+    var provRow   = prov     ? '<div class="row"><span class="lbl">Proveedor</span><span class="val">'+esc(prov)+'</span></div>' : '';
+    var valSRow   = valS     ? '<div class="row"><span class="lbl">Valor S/.</span><span class="val">S/. '+esc(valS)+'</span></div>' : '';
+    var valDRow   = valD     ? '<div class="row"><span class="lbl">Valor USD</span><span class="val">$ '+esc(valD)+'</span></div>' : '';
+    var proyRow   = proyecto ? '<div class="row"><span class="lbl">Proyecto</span><span class="val">'+esc(proyecto)+'</span></div>' : '';
 
     document.getElementById('content').innerHTML =
       '<div class="hdr pr-hdr">'+
-        '<div class="badge pr-badge"><span>⚡ ELECNOR PERU S.A.C.</span></div>'+
+        '<div class="badge pr-badge"><span>⚡ '+esc(empresa)+'</span></div>'+
         '<div style="display:inline-block;margin-left:8px;" class="tipo-badge pr-tipo">PRODUCTO</div><br>'+
         '<div class="cod">📦 '+esc(cod)+'</div>'+
         '<div class="sub pr-sub">'+esc(desc)+'</div>'+
@@ -223,6 +222,7 @@ if(modo === 'equipo' || modo === ''){
         '<div class="row"><span class="lbl">Descripción</span><span class="val">'+esc(desc)+'</span></div>'+
         '<div class="row"><span class="lbl">Unidad de Medida</span><span class="val">'+esc(um)+'</span></div>'+
         provRow+
+        proyRow+
         valSRow+
         valDRow+
       '</div>'+
