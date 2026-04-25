@@ -143,10 +143,21 @@ if(modo === 'equipo' || modo === ''){
   } else {
     document.title = cod + ' | ' + empresa;
     document.body.classList.add('modo-equipo');
-    var activo = estado.toUpperCase()==='ACTIVO';
-    var dotColor = activo ? '#22c55e' : '#ef4444';
-    var pillBg   = activo ? '#dcfce7' : '#fee2e2';
-    var pillFg   = activo ? '#166534' : '#991b1b';
+    var dotColor, pillBg, pillFg;
+    switch(estado.toUpperCase().trim()){
+      case 'OPERATIVO':
+        dotColor='#22c55e'; pillBg='#dcfce7'; pillFg='#166534'; break;
+      case 'EN MANTENIMIENTO':
+        dotColor='#f59e0b'; pillBg='#fef3c7'; pillFg='#92400e'; break;
+      case 'INOPERATIVO':
+        dotColor='#ef4444'; pillBg='#fee2e2'; pillFg='#991b1b'; break;
+      case 'BAJA':
+        dotColor='#64748b'; pillBg='#e2e8f0'; pillFg='#334155'; break;
+      case 'DESMOVILIZADO':
+        dotColor='#a855f7'; pillBg='#f3e8ff'; pillFg='#6b21a8'; break;
+      default:
+        dotColor='#64748b'; pillBg='#e2e8f0'; pillFg='#334155';
+    }
     var imgSrc   = toImg(foto);
 
     var fotoHTML = imgSrc
@@ -233,3 +244,4 @@ if(modo === 'equipo' || modo === ''){
 </script>
 </body>
 </html>
+fix: corregir colores de estados
